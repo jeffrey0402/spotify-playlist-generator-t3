@@ -20,10 +20,10 @@ const Home: NextPage = () => {
     return (
       <>
         Signed in as {session.user?.name} <br />
-        <button onClick={() => signOut()}>Sign out</button>
+        <button className="btn" onClick={() => signOut()}>Sign out</button>
         <hr />
-        <button onClick={() => getMyPlaylists()}>Get all my playlists!</button>
-        <div className="flex flex-row">
+        <button className="btn" onClick={() => getMyPlaylists()}>Get all my playlists!</button>
+        <div className="flex flex-col">
           {list.map((item: any) => PlayListItem({ item }))}
         </div>
       </>
@@ -32,21 +32,21 @@ const Home: NextPage = () => {
   return (
     <>
       Not signed in <br />
-      <button onClick={() => signIn()}>Sign in</button>
+      <button className="btn" onClick={() => signIn()}>Sign in</button>
     </>
   );
 };
 
 function PlayListItem({ item }: { item: any }) {
   return (
-    <div className="p-2">
-      <p>{item.name}</p>
+    <div className="p-2 flex flex-row w-96">
       <Image
         src={item.images[0].url}
         alt={item.name + " Playlist image"}
         width="100"
         height="100"
-      />
+        />
+        <p className="m-auto">{item.name}</p>
     </div>
   );
 }
