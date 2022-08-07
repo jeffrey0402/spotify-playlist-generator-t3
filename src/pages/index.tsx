@@ -15,7 +15,6 @@ const Home: NextPage = () => {
     setPage(offset/20);
     const res = await fetch("/api/playlists?offset=" + offset);
     let { items, total } = await res.json();
-    console.log(items[0])
     
     setTotalPages(Math.ceil(total/20))
     setList(items);
