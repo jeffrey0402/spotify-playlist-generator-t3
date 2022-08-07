@@ -16,7 +16,7 @@ export const authOptions: NextAuthOptions = {
   // Configure one or more authentication providers
   providers: [
     SpotifyProvider({
-      authorization: 'https://accounts.spotify.com/authorize?scope=user-read-email,user-read-private',
+      authorization: 'https://accounts.spotify.com/authorize?scope=user-read-email,user-read-private,playlist-read-private',
       clientId: env.SPOTIFY_CLIENT_ID,
       clientSecret: env.SPOTIFY_CLIENT_SECRET,
     }),
