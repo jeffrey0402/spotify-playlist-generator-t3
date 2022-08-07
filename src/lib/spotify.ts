@@ -20,9 +20,9 @@ const getAccessToken = async (refresh_token: any) => {
   return response.json();
 };
 
-export const getUsersPlaylists = async (refresh_token: any) => {
+export const getUsersPlaylists = async (refresh_token: any, offset: number) => {
   const { access_token } = await getAccessToken(refresh_token);
-  return fetch(PLAYLISTS_ENDPOINT, {
+  return fetch(PLAYLISTS_ENDPOINT + "?offset=" + offset, {
     headers: {
       Authorization: `Bearer ${access_token}`,
     },
