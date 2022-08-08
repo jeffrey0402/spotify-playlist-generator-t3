@@ -3,6 +3,7 @@ const client_secret = process.env.SPOTIFY_CLIENT_SECRET;
 const basic = Buffer.from(`${client_id}:${client_secret}`).toString("base64");
 const TOKEN_ENDPOINT = `https://accounts.spotify.com/api/token`;
 const PLAYLISTS_ENDPOINT = "https://api.spotify.com/v1/me/playlists";
+const PLAYLIST_ITEM_ENDPOINT = "https://api.spotify.com/v1/playlists";
 
 const getAccessToken = async (refresh_token: any) => {
   const response = await fetch(TOKEN_ENDPOINT, {
@@ -28,3 +29,12 @@ export const getUsersPlaylists = async (refresh_token: any, offset: number) => {
     },
   });
 };
+
+export const getPlaylistItems = async (refresh_token: any, playlist_id: string, offset: number) => {
+  const { access_token } = await getAccessToken(refresh_token);
+  return fetch(`${PLAYLIST_ITEM_ENDPOINT}/${playlist_id}/tracks?offset=${offset}`, {
+    headers: {
+      Authorization: `Bearer ${access_token}`,
+    },
+  });
+}
