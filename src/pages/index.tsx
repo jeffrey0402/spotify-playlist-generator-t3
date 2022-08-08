@@ -25,11 +25,11 @@ const Home: NextPage = () => {
     setList(items);
   };
 
-  const setPlaylist = async (id: string) => {
+  const setPlaylist = async (id: string, name: string) => {
     const res = await fetch("/api/playlist/songs/" + id);
     const { items } = await res.json();
     setSelectedList(items);
-    setSelectedName(items[0].name);
+    setSelectedName(name);
   };
 
   if (session) {
@@ -60,7 +60,7 @@ const Home: NextPage = () => {
               ))}
             </div>
             <div>
-              <p>{selectedName}</p>
+              <p className="font-bold">{selectedName}</p>
               {selectedList.map((item: any) => (
                 <p key={item.track.id}>{item.track.name}</p>
               ))}
