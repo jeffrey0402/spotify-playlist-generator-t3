@@ -2,22 +2,34 @@
 
 This is an app bootstrapped according to the [init.tips](https://init.tips) stack, also known as the T3-Stack.
 
-## Why are there `.js` files in here?
+# Live version
 
-As per [T3-Axiom #3](https://github.com/t3-oss/create-t3-app/tree/next#3-typesafety-isnt-optional), we believe take typesafety as a first class citizen. Unfortunately, not all frameworks and plugins support TypeScript which means some of the configuration files have to be `.js` files.
+An up to date version of this simple app runs on
 
-We try to emphasize that these files are javascript for a reason, by explicitly declaring its type (`cjs` or `mjs`) depending on what's supported by the library it is used by. Also, all the `js` files in this project are still typechecked using a `@ts-check` comment at the top.
+https://spotify-playlist-generator-t3-production.up.railway.app/
 
-## What's next? How do I make an app with this?
+# Environment variables
 
-We try to keep this project as simple as possible, so you can start with the most basic configuration and then move on to more advanced configuration.
+This project requires the following env values:
 
-If you are not familiar with the different technologies used in this project, please refer to the respective docs. If you still are in the wind, please join our [Discord](https://t3.gg/discord) and ask for help.
+```
+SPOTIFY_CLIENT_ID=
+SPOTIFY_CLIENT_SECRET=
+NEXTAUTH_SECRET=
+NEXTAUTH_URL=
+```
 
-- [Next-Auth.js](https://next-auth.js.org)
-- [Prisma](https://prisma.io)
-- [TailwindCSS](https://tailwindcss.com)
-- [tRPC](https://trpc.io) (using @next version? [see v10 docs here](https://alpha.trpc.io))
+Spotify Client ID and secret can be obtained at https://developer.spotify.com/dashboard/login
+
+For more info on nextauth, check out https://next-auth.js.org/configuration/options
+
+
+
+This project also requires to set the redirect URL on the spotify dashboard. For testing purposes, you can set it to `http://localhost:3000/api/auth/callback/spotify` for local testing.
+
+Also make sure to whitelist test users. Spotify developer apps only allow 25 whitelisted users!
+
+
 
 ## How do I deploy this?
 
@@ -63,7 +75,7 @@ You can also dockerize this stack and deploy a container.
    # Check https://github.com/nodejs/docker-node/tree/b4117f9333da4138b03a546ec926ef50a31506c3#nodealpine to understand why libc6-compat might be needed.
    RUN apk add --no-cache libc6-compat
    WORKDIR /app
-
+   
    # Install dependencies based on the preferred package manager
    COPY package.json yarn.lock* package-lock.json* pnpm-lock.yaml* ./
    RUN \

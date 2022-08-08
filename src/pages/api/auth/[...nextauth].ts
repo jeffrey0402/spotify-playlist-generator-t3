@@ -1,5 +1,4 @@
 import NextAuth, { Session, User, type NextAuthOptions } from "next-auth";
-import { JWT } from "next-auth/jwt/types.js";
 import SpotifyProvider from "next-auth/providers/spotify";
 import { env } from "../../../env/server.mjs";
 

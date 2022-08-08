@@ -3,7 +3,9 @@ import Head from "next/head";
 
 import { useSession, signIn, signOut } from "next-auth/react";
 import { useState } from "react";
-import Image from "next/image";
+import { PlayListItem } from "../components/PlayListItem";
+import { PagesWidget } from "../components/PagesWidget";
+import { useAutoAnimate } from "@formkit/auto-animate";
 
 const Home: NextPage = () => {
   const { data: session } = useSession();
@@ -21,6 +23,7 @@ const Home: NextPage = () => {
   };
 
   if (session) {
+
     return (
       <>
         <main className="m-2">
@@ -37,7 +40,7 @@ const Home: NextPage = () => {
           <div className="flex flex-col">
             {list.map((item: any) => PlayListItem({ item }))}
           </div>
-          {Pagination()}
+          <PagesWidget getPlaylists={getMyPlaylists} currentPage={currentPage} totalPages={totalPages} />
         </main>
       </>
     );
@@ -50,42 +53,7 @@ const Home: NextPage = () => {
       </button>
     </>
   );
-
-  function Pagination() {
-    return (
-      <div className="btn-group">
-       {[...Array(totalPages)].map((_, i) => (
-          <button
-            key={i}
-            className={`btn ${currentPage === i ? "btn-primary" : "btn-secondary"}`}
-            onClick={() => getMyPlaylists(i * 20)}
-          >
-            {i + 1}
-          </button>
-        ))}
-      </div>
-    );
-  }
 };
-
-function PlayListItem({ item }: { item: any }) {
-  return (
-    <div key={item.id} className="p-2 flex flex-row">
-      <Image
-        src={item.images[0].url}
-        alt={item.name + " Playlist image"}
-        width="96"
-        height="96"
-        className="w-24 h-24"
-      />
-      <div className="my-auto ml-2">
-        <h1 className="font-bold">{item.name}</h1>
-        <p>{item.description}</p>
-      </div>
-    </div>
-  );
-}
-
 
 
 export default Home;
