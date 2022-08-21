@@ -110,6 +110,14 @@ const fetcher = (url: string) => fetch(url).then((r) => r.json());
 
 export const SongList = ({ id, name }: SongListProps) => {
   const getKey = (pageIndex: number, previousPageData: Data) => {
+
+    if(previousPageData && previousPageData.next === null) {
+      console.log("no more songs");
+    }
+    if (pageIndex === 0 && id) {
+      console.log("first page");
+    }
+    console.log(pageIndex);
     // no ID selected
     if (!id) {
       return null;
@@ -157,16 +165,14 @@ export const SongList = ({ id, name }: SongListProps) => {
     });
 
     return (
-      <div className="h-[90vh] overflow-auto" ref={rootRef}>
-        <ul>
-          {allSongs.map((song) => (
-            <li key={song.track.id}>
-              <p>{song.track.name}</p>
-            </li>
-          ))}
-          {!isReachingEnd && <li ref={infiniteRef}>Loading...</li>}
-        </ul>
-      </div>
+      <ul className="" ref={rootRef}>
+        {allSongs.map((song) => (
+          <li key={song.track.id}>
+            <p>{song.track.name}</p>
+          </li>
+        ))}
+        {!isReachingEnd && <li className="font-bold" ref={infiniteRef}>Loading More songs...</li>}
+      </ul>
     );
   };
 
