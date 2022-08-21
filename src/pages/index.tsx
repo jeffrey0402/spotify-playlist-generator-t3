@@ -8,6 +8,7 @@ import { useState } from "react";
 import { PlayListItem } from "../components/PlayListItem";
 import { PagesWidget } from "../components/PagesWidget";
 import { SongList } from "../components/SongList";
+import { Playlists } from "../components/Playlists";
 
 const Home: NextPage = () => {
   const { data: session } = useSession();
@@ -40,17 +41,14 @@ const Home: NextPage = () => {
           <div className="grid grid-cols-3">
             {/* Playlists */}
             <div className="flex flex-col">
-              <PagesWidget
-                getPlaylists={getMyPlaylists}
-                currentPage={currentPage}
-                totalPages={totalPages}
-              />
-              {list.map((item: any) => (
+              {/* {list.map((item: any) => (
                 <PlayListItem key={item.id} item={item} onPress={setPlaylist} />
-              ))}
+              ))} */}
+              <Playlists onPress={setPlaylist} />
             </div>
             {/* Songs */}
             <SongList id={currentPlaylistId} name={currentPlaylistName} />
+            {/* Nieuwe lijst */}
             <div>Nieuwe lijst!</div>
           </div>
           <p>

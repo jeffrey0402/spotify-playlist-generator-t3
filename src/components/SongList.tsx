@@ -104,20 +104,10 @@ const fetcher = (url: string) => fetch(url).then((r) => r.json());
 // https://swr.vercel.app/docs/pagination
 
 // https://swr.vercel.app/examples/infinite-loading
-
-// "https://api.spotify.com/v1/playlists/11buFaA6CX39i9ikUR42yY/tracks?offset=50&limit=50"
-// /api/playlist/songs/${id}{getKey}&limit=${LIMIT}
+// https://github.dev/onderonur/tmdb-explorer
 
 export const SongList = ({ id, name }: SongListProps) => {
   const getKey = (pageIndex: number, previousPageData: Data) => {
-
-    if(previousPageData && previousPageData.next === null) {
-      console.log("no more songs");
-    }
-    if (pageIndex === 0 && id) {
-      console.log("first page");
-    }
-    console.log(pageIndex);
     // no ID selected
     if (!id) {
       return null;
@@ -165,7 +155,7 @@ export const SongList = ({ id, name }: SongListProps) => {
     });
 
     return (
-      <ul className="" ref={rootRef}>
+      <ul ref={rootRef}>
         {allSongs.map((song) => (
           <li key={song.track.id}>
             <p>{song.track.name}</p>
