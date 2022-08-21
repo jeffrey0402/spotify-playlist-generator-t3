@@ -30,9 +30,9 @@ export const getUsersPlaylists = async (refresh_token: any, offset: number) => {
   });
 };
 
-export const getPlaylistItems = async (refresh_token: any, playlist_id: string, offset: number) => {
+export const getPlaylistItems = async (refresh_token: any, playlist_id: string, offset: number, limit: number) => {
   const { access_token } = await getAccessToken(refresh_token);
-  return fetch(`${PLAYLIST_ITEM_ENDPOINT}/${playlist_id}/tracks?offset=${offset}`, {
+  return fetch(`${PLAYLIST_ITEM_ENDPOINT}/${playlist_id}/tracks?offset=${offset}&limit=${limit}`, {
     headers: {
       Authorization: `Bearer ${access_token}`,
     },

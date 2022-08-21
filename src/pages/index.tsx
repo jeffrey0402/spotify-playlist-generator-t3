@@ -2,19 +2,19 @@ import type { NextPage } from "next";
 import Head from "next/head";
 
 import { useSession, signIn, signOut } from "next-auth/react";
+import useSWR from "swr";
+import useSWRInfinite from "swr/infinite";
 import { useState } from "react";
 import { PlayListItem } from "../components/PlayListItem";
 import { PagesWidget } from "../components/PagesWidget";
+import { SongList } from "../components/SongList";
 
 const Home: NextPage = () => {
   const { data: session } = useSession();
   const [list, setList] = useState([]);
   const [currentPage, setPage] = useState(0);
   const [totalPages, setTotalPages] = useState(0);
-  const [selectedList, setSelectedList] = useState([
-    { id: "none", track: { name: "Select a playlist to get started!" } },
-  ]);
-  const [selectedName, setSelectedName] = useState("");
+  const [currentPlaylistId, setCurrentPlaylistId] = useState("");
 
   const getMyPlaylists = async (offset: number) => {
     setPage(offset / 20);
@@ -25,13 +25,10 @@ const Home: NextPage = () => {
     setList(items);
   };
 
-  const setPlaylist = async (id: string, name: string) => {
-    const res = await fetch("/api/playlist/songs/" + id);
-    const { items } = await res.json();
-    setSelectedList(items);
-    setSelectedName(name);
-  };
-
+  const setPlaylist = (id: string) => {
+    setCurrentPlaylistId(id);
+  }
+  
   if (session) {
     return (
       <>
@@ -59,12 +56,8 @@ const Home: NextPage = () => {
                 <PlayListItem key={item.id} item={item} onPress={setPlaylist} />
               ))}
             </div>
-            <div>
-              <p className="font-bold">{selectedName}</p>
-              {selectedList.map((item: any) => (
-                <p key={item.track.id}>{item.track.name}</p>
-              ))}
-            </div>
+            {/* Songs */}
+            <SongList id={currentPlaylistId} />
             <div>Nieuwe lijst!</div>
           </div>
         </main>

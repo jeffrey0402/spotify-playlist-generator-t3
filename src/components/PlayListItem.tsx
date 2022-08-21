@@ -3,9 +3,10 @@ import { MouseEventHandler } from "react";
 
 type PlayListItemProps = {
   item: any; //TODO: type this
-  onPress: (id: string, name: string) => Promise<void>;
+  onPress: (id: string) => void;
 };
 
+// Playlist component
 export const PlayListItem = ({ item, onPress }: PlayListItemProps) => {
   return (
     <div key={item.id} className="p-2 flex flex-row">
@@ -16,7 +17,7 @@ export const PlayListItem = ({ item, onPress }: PlayListItemProps) => {
         height="96"
         className="w-24 h-24"
       /> */}
-      <div className="my-auto ml-2" onClick={() => onPress(item.id, item.name)}>
+      <div className="my-auto ml-2" onClick={() => onPress(item.id)}>
         <p className="font-bold">{item.name}</p>
         {/* <p>{item.description}</p> */}
       </div>
