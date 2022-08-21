@@ -1,8 +1,10 @@
 import useSWR from "swr";
 import useSWRInfinite from "swr/infinite";
+import useInfiniteScroll from "react-infinite-scroll-hook";
 
 type SongListProps = {
   id: string;
+  name: string;
 };
 
 type Data = {
@@ -106,7 +108,7 @@ const fetcher = (url: string) => fetch(url).then((r) => r.json());
 // "https://api.spotify.com/v1/playlists/11buFaA6CX39i9ikUR42yY/tracks?offset=50&limit=50"
 // /api/playlist/songs/${id}{getKey}&limit=${LIMIT}
 
-export const SongList = ({ id }: SongListProps) => {
+export const SongList = ({ id, name }: SongListProps) => {
   const getKey = (pageIndex: number, previousPageData: Data) => {
     // no ID selected
     if (!id) {
@@ -141,22 +143,37 @@ export const SongList = ({ id }: SongListProps) => {
     allSongs = allSongs.concat(item.items);
   });
 
-  const isReachingEnd = data[data.length]?.next === null;
+  const isReachingEnd = data[data.length - 1]?.next === null;
+
+  const SongList = (): JSX.Element => {
+    const [infiniteRef, { rootRef }] = useInfiniteScroll({
+      loading: isValidating,
+      hasNextPage: !isReachingEnd,
+      onLoadMore: () => {
+        setSize(size + 1);
+      },
+      rootMargin: "0px",
+      disabled: !!error,
+    });
+
+    return (
+      <div className="h-[90vh] overflow-auto" ref={rootRef}>
+        <ul>
+          {allSongs.map((song) => (
+            <li key={song.track.id}>
+              <p>{song.track.name}</p>
+            </li>
+          ))}
+          {!isReachingEnd && <li ref={infiniteRef}>Loading...</li>}
+        </ul>
+      </div>
+    );
+  };
 
   return (
-    <div className="overflow-y-auto h-screen">
-      <p className="font-bold">{id}</p>
-      {allSongs.map((item: any) => (
-        <p key={item.track.id}>{item.track.name}</p>
-      ))}
-      {isReachingEnd && <p>Reached end</p>}
-      <button
-        className=" btn btn-primary"
-        disabled={isReachingEnd}
-        onClick={() => setSize(size + 1)}
-      >
-        Load more...
-      </button>
+    <div>
+      <p className="font-bold">{name}</p>
+      <SongList />
     </div>
   );
 };

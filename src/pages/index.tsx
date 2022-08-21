@@ -15,6 +15,7 @@ const Home: NextPage = () => {
   const [currentPage, setPage] = useState(0);
   const [totalPages, setTotalPages] = useState(0);
   const [currentPlaylistId, setCurrentPlaylistId] = useState("");
+  const [currentPlaylistName, setCurrentPlaylistName] = useState("");
 
   const getMyPlaylists = async (offset: number) => {
     setPage(offset / 20);
@@ -25,24 +26,16 @@ const Home: NextPage = () => {
     setList(items);
   };
 
-  const setPlaylist = (id: string) => {
+  const setPlaylist = (id: string, name: string) => {
     setCurrentPlaylistId(id);
+    setCurrentPlaylistName(name);
   }
   
   if (session) {
     return (
       <>
         <main className="m-2">
-          <p>
-            Signed in as <span className="font-bold">{session.user?.name}</span>
-          </p>
-          <button className="btn btn-error" onClick={() => signOut()}>
-            Sign out
-          </button>
-          <button className="btn btn-info" onClick={() => getMyPlaylists(0)}>
-            Get all my playlists!
-          </button>
-          <hr className="my-2" />
+
           {/* Grid layout containing 3 equally sized columns. */}
           <div className="grid grid-cols-3">
             {/* Playlists */}
@@ -57,9 +50,19 @@ const Home: NextPage = () => {
               ))}
             </div>
             {/* Songs */}
-            <SongList id={currentPlaylistId} />
+            <SongList id={currentPlaylistId} name={currentPlaylistName} />
             <div>Nieuwe lijst!</div>
           </div>
+          <p>
+            Signed in as <span className="font-bold">{session.user?.name}</span>
+          </p>
+          <hr className="my-2" />
+          <button className="btn btn-error" onClick={() => signOut()}>
+            Sign out
+          </button>
+          <button className="btn btn-info" onClick={() => getMyPlaylists(0)}>
+            Get all my playlists!
+          </button>
         </main>
       </>
     );
