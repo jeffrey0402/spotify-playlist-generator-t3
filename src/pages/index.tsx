@@ -30,13 +30,12 @@ const Home: NextPage = () => {
   const setPlaylist = (id: string, name: string) => {
     setCurrentPlaylistId(id);
     setCurrentPlaylistName(name);
-  }
-  
+  };
+
   if (session) {
     return (
       <>
         <main className="m-2">
-
           {/* Grid layout containing 3 equally sized columns. */}
           <div className="grid grid-cols-3">
             {/* Playlists */}
@@ -49,29 +48,34 @@ const Home: NextPage = () => {
             {/* Songs */}
             <SongList id={currentPlaylistId} name={currentPlaylistName} />
             {/* Nieuwe lijst */}
-            <div>Nieuwe lijst!</div>
+            <div className="flex flex-col">
+              <div className="flex flex-row-reverse">
+                <button className="btn btn-error" onClick={() => signOut()}>
+                  Sign out
+                </button>
+                <p className="my-auto m-2">
+                  Signed in as{" "}
+                  <span className="font-bold">{session.user?.name}</span>
+                </p>
+              </div>
+              Nieuwe lijst!
+              <button className="btn btn-primary m-2">Add list to spotify!</button>
+            </div>
           </div>
-          <p>
-            Signed in as <span className="font-bold">{session.user?.name}</span>
-          </p>
-          <hr className="my-2" />
-          <button className="btn btn-error" onClick={() => signOut()}>
-            Sign out
-          </button>
-          <button className="btn btn-info" onClick={() => getMyPlaylists(0)}>
-            Get all my playlists!
-          </button>
         </main>
       </>
     );
   }
   return (
-    <>
-      Not signed in <br />
-      <button className="btn" onClick={() => signIn()}>
-        Sign in
-      </button>
-    </>
+    // Overkill div centering? yes.
+    <div className="grid h-screen place-items-center">
+      <div className="flex flex-col">
+        <p>Not signed in </p>
+        <button className="btn btn-primary" onClick={() => signIn()}>
+          Sign in
+        </button>
+      </div>
+    </div>
   );
 };
 
