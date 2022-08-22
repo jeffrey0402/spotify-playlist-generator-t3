@@ -23,6 +23,10 @@ const Home: NextPage = () => {
   };
 
   const addSong = (song: Song) => {
+    // check if song is already in the list
+    if (newList.find((s) => s.track.id === song.track.id)) {
+      return;
+    }
     setNewList([...newList, song]);
   };
 
