@@ -1,100 +1,11 @@
 import useSWR from "swr";
 import useSWRInfinite from "swr/infinite";
 import useInfiniteScroll from "react-infinite-scroll-hook";
+import { Data, Song } from "../types/types";
 
 type SongListProps = {
   id: string;
   name: string;
-};
-
-type Data = {
-  href: string;
-  items: Song[];
-  limit: number;
-  next: string | null;
-  offset: number;
-  previous: string | null;
-  total: number;
-};
-
-type Song = {
-  added_at: string;
-  added_by: {
-    external_urls: {
-      spotify: string;
-    };
-    href: string;
-    id: string;
-    type: string;
-    uri: string;
-  };
-  is_local: boolean;
-  primary_color: any;
-  track: {
-    album: {
-      album_type: string;
-      artists: {
-        external_urls: {
-          spotify: string;
-        };
-        href: string;
-        id: string;
-        name: string;
-        type: string;
-        uri: string;
-      }[];
-      available_markets: string[];
-      external_urls: {
-        spotify: string;
-      };
-      href: string;
-      id: string;
-      images: {
-        height: number;
-        url: string;
-        width: number;
-      }[];
-      name: string;
-      release_date: string;
-      release_date_precision: string;
-      total_tracks: number;
-      type: string;
-      uri: string;
-    };
-    artists: {
-      external_urls: {
-        spotify: string;
-      };
-      href: string;
-      id: string;
-      name: string;
-      type: string;
-      uri: string;
-    }[];
-    available_markets: string[];
-    disc_number: number;
-    duration_ms: number;
-    episode: boolean;
-    explicit: boolean;
-    external_ids: {
-      isrc: string;
-    }[];
-    external_urls: {
-      spotify: string;
-    };
-    href: string;
-    id: string;
-    is_local: boolean;
-    name: string;
-    popularity: number;
-    preview_url: string;
-    track_number: number;
-    type: string;
-    uri: string;
-  };
-  video_thumbnail: {
-    url: string | null;
-  };
 };
 
 const LIMIT = 50; //default
@@ -154,15 +65,43 @@ export const SongList = ({ id, name }: SongListProps) => {
       disabled: !!error,
     });
 
+    const msToMS = (ms: number) => {
+      const minutes: number = Math.floor(ms / 60000);
+      const seconds: number = parseInt(((ms % 60000) / 1000).toFixed(0));
+      return minutes + ":" + (seconds < 10 ? "0" : "") + seconds;
+    }
+
     return (
-      <ul ref={rootRef}>
+      <table className="table-fixed bg-primary-content" ref={rootRef}>
+        <thead>
+          <tr>
+            <th>Title</th>
+            <th>Album</th>
+            <th>Date Added</th>
+            <th>Duration</th>
+            <th>Add</th>
+          </tr>
+        </thead>
+        <tbody>
         {allSongs.map((song) => (
-          <li key={song.track.id}>
-            <p>{song.track.name}</p>
-          </li>
+          <tr key={song.track.id}>
+            <td className="flex flex-col">
+              <p className="font-bold">{song.track.name}</p>
+              <p>{song.track.artists.map((artist) => artist.name).join(", ")}</p>
+              </td>
+            <td>{song.track.album.name}</td>
+            <td>{song.added_at}</td>
+            <td>{msToMS(song.track.duration_ms)}</td>
+            <td>+</td>
+          </tr>
         ))}
-        {!isReachingEnd && <li className="font-bold" ref={infiniteRef}>Loading More songs...</li>}
-      </ul>
+        {!isReachingEnd && (
+          <tr className="font-bold" ref={infiniteRef}>
+            <td>Loading More songs...</td>
+          </tr>
+        )}
+      </tbody>
+      </table>
     );
   };
 
@@ -172,4 +111,6 @@ export const SongList = ({ id, name }: SongListProps) => {
       <SongList />
     </div>
   );
+
+
 };

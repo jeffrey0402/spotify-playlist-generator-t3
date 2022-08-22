@@ -19,7 +19,7 @@ export const PlayListItem = ({ item, onPress }: PlayListItemProps) => {
       /> */}
       <div className="my-auto ml-2" onClick={() => onPress(item.id, item.name)}>
         <p className="font-bold">{item.name}</p>
-        {/* <p>{item.description}</p> */}
+        <p>{item.description}</p>
       </div>
     </div>
   );

@@ -92,7 +92,7 @@ export const Playlists = ({ onPress }: PlaylistsProps) => {
     });
 
     return (
-      <ul ref={rootRef}>
+      <ul className="" ref={rootRef}>
         {allPlaylists.map((item, index) => (
           <li key={item.id} className="p-2 flex flex-row">
             <div
