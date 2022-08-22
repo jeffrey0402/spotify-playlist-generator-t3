@@ -26,6 +26,10 @@ const Home: NextPage = () => {
     setNewList([...newList, song]);
   }
 
+  const removeSong = (id: string) => {
+    setNewList(newList.filter(s => s.track.id !== id));
+  }
+
   if (session) {
     return (
       <>
@@ -54,7 +58,10 @@ const Home: NextPage = () => {
               </div>
               {/* Items */}
               {newList.map((item: any) => (
-                <p key={item.track.id}>{item.track.name}</p>
+                <div className="flex" key={item.track.id}>
+                  <p >{item.track.name}</p>
+                  <button onClick={() => removeSong(item.track.id)} className="btn btn-warning">-</button>
+                </div>
               ))}
               <button className="btn btn-primary m-2">
                 Add list to spotify!
