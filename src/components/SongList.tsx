@@ -6,6 +6,7 @@ import { Data, Song } from "../types/types";
 type SongListProps = {
   id: string;
   name: string;
+  addSong: (song: Song) => void;
 };
 
 const LIMIT = 50; //default
@@ -17,7 +18,7 @@ const fetcher = (url: string) => fetch(url).then((r) => r.json());
 // https://swr.vercel.app/examples/infinite-loading
 // https://github.dev/onderonur/tmdb-explorer
 
-export const SongList = ({ id, name }: SongListProps) => {
+export const SongList = ({ id, name, addSong }: SongListProps) => {
   const getKey = (pageIndex: number, previousPageData: Data) => {
     // no ID selected
     if (!id) {
@@ -69,7 +70,7 @@ export const SongList = ({ id, name }: SongListProps) => {
       const minutes: number = Math.floor(ms / 60000);
       const seconds: number = parseInt(((ms % 60000) / 1000).toFixed(0));
       return minutes + ":" + (seconds < 10 ? "0" : "") + seconds;
-    }
+    };
 
     return (
       <table className="table-fixed bg-primary-content" ref={rootRef}>
@@ -83,24 +84,33 @@ export const SongList = ({ id, name }: SongListProps) => {
           </tr>
         </thead>
         <tbody>
-        {allSongs.map((song) => (
-          <tr key={song.track.id}>
-            <td className="flex flex-col">
-              <p className="font-bold">{song.track.name}</p>
-              <p>{song.track.artists.map((artist) => artist.name).join(", ")}</p>
+          {allSongs.map((song) => (
+            <tr key={song.track.id}>
+              <td className="flex flex-col">
+                <p className="font-bold">{song.track.name}</p>
+                <p>
+                  {song.track.artists.map((artist) => artist.name).join(", ")}
+                </p>
               </td>
-            <td>{song.track.album.name}</td>
-            <td>{song.added_at}</td>
-            <td>{msToMS(song.track.duration_ms)}</td>
-            <td>+</td>
-          </tr>
-        ))}
-        {!isReachingEnd && (
-          <tr className="font-bold" ref={infiniteRef}>
-            <td>Loading More songs...</td>
-          </tr>
-        )}
-      </tbody>
+              <td>{song.track.album.name}</td>
+              <td>{song.added_at}</td>
+              <td>{msToMS(song.track.duration_ms)}</td>
+              <td>
+                <button
+                  onClick={() => addSong(song)}
+                  className="btn btn-primary"
+                >
+                  +
+                </button>
+              </td>
+            </tr>
+          ))}
+          {!isReachingEnd && (
+            <tr className="font-bold" ref={infiniteRef}>
+              <td>Loading More songs...</td>
+            </tr>
+          )}
+        </tbody>
       </table>
     );
   };
@@ -111,6 +121,4 @@ export const SongList = ({ id, name }: SongListProps) => {
       <SongList />
     </div>
   );
-
-
 };
